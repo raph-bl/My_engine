@@ -16,6 +16,7 @@ public class Main {
 
     boolean isRunning = false;
 
+
     Camera cam;
 
     public Main() {
@@ -40,6 +41,7 @@ public class Main {
             Mouse.setGrabbed(true);
         }
         if(!Mouse.isGrabbed()) return;
+        cam.keyInputListener();
     }
 
     public void quit() {
@@ -50,7 +52,7 @@ public class Main {
     public void render() {
         DisplayManager.clearBuffers();
         cam.getPerspectiveProjection();
-    
+        cam.update();
         glBegin(GL_QUADS);
             glVertex3f(-1,-0.5f,-1);
             glVertex3f(1,-0.5f,-1);
@@ -106,6 +108,7 @@ public class Main {
                 }
             }
         }
+        quit();
     }
 
     public static void main(String[] args) {
