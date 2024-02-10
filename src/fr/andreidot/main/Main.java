@@ -1,8 +1,7 @@
 package fr.andreidot.main;
 
 import fr.andreidot.math.Vector3f;
-import fr.andreidot.render.Camera;
-import fr.andreidot.render.DisplayManager;
+import fr.andreidot.render.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -10,8 +9,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Main {
 
-    // TODO: FPS patch ? (why lagging)
     // TODO : ObjLoader
+
+    Loader loader = new Loader();
+    RawModel mdl = OBJLoader.loadObjModel("obj", loader);
 
     boolean isRunning = false;
     public static int rotValue = 0;
@@ -128,6 +129,7 @@ public class Main {
 
             if (System.nanoTime() - lastTickTime > tickTime) {
                 lastTickTime += tickTime;
+
                 rotValue++;
                 update();
                 TICKS++;
