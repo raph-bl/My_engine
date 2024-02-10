@@ -16,6 +16,8 @@ public class DisplayManager {
             Display.setTitle(frameTitle);
             Display.setResizable(isResizable);
             Display.create();
+
+            GL11.glEnable(GL11.GL_CULL_FACE);
         } catch (LWJGLException e) {
             e.printStackTrace();
         }

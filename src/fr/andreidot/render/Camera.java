@@ -1,5 +1,6 @@
 package fr.andreidot.render;
 
+import fr.andreidot.main.Main;
 import fr.andreidot.math.Vector3f;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -78,6 +79,23 @@ public class Camera {
 
         return new Vector3f(r);
     }
+    public Vector3f getBack() { return new Vector3f(getForward().mul(-1)); }
+
+    public Vector3f getRight() {
+        Vector3f rot = new Vector3f(this.rot);
+
+        Vector3f r = new Vector3f();
+        r.setX((float) Math.cos(Math.toRadians(rot.getY())));
+        r.setZ((float) Math.sin(Math.toRadians(rot.getY())));
+
+        r.normalize();
+
+        return new Vector3f(r);
+    }
+
+    public Vector3f getLeft() {
+        return new Vector3f(getRight().mul(-1));
+    }
 
     public void keyInputListener() {
         rot.addX(-Mouse.getDY() * mouseSpeed);
@@ -90,6 +108,18 @@ public class Camera {
 
         if(Keyboard.isKeyDown(Keyboard.KEY_Z) || Keyboard.isKeyDown(Keyboard.KEY_UP))
             pos.add(getForward().mul(moveSpeed));
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_Q) || Keyboard.isKeyDown(Keyboard.KEY_LEFT))
+            pos.add(getLeft().mul(moveSpeed));
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_D) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+            pos.add(getRight().mul(moveSpeed));
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_S) || Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+            pos.add(getBack().mul(moveSpeed));
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_A))
+            Main.rotValue+= 10;
     }
 
     // Getters & Setters
