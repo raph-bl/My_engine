@@ -106,6 +106,14 @@ public class Camera {
         if(rot.getX() < -90)
             rot.setX(-90);
 
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+            if(!Main.isDebugMenuShown) {
+                Main.isDebugMenuShown = true;
+            } else {
+                Main.isDebugMenuShown = false;
+            }
+        }
         if(Keyboard.isKeyDown(Keyboard.KEY_Z) || Keyboard.isKeyDown(Keyboard.KEY_UP))
             pos.add(getForward().mul(moveSpeed));
 

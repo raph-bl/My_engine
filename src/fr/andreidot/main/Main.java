@@ -4,6 +4,7 @@ import fr.andreidot.math.Vector3f;
 import fr.andreidot.render.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -11,12 +12,15 @@ public class Main {
 
     // TODO : ObjLoader
 
-    Loader loader = new Loader();
-    RawModel mdl = OBJLoader.loadObjModel("obj", loader);
+    boolean isRunning                               = false;
+    public static boolean isDebugMenuShown          = false;
 
-    boolean isRunning = false;
-    public static int rotValue = 0;
+    public static int rotValue                      = 0;
+
     Camera cam;
+
+    // Loader loader       = new Loader();
+    // RawModel mdl        = OBJLoader.loadObjModel("monkey", loader);
 
     public Main() {
         DisplayManager.createFrame("AndreiEngine",800,600, false );
@@ -29,9 +33,7 @@ public class Main {
         loop();
     }
 
-    public void stop() {
-        isRunning = false;
-    }
+    public void stop() { isRunning = false; }
 
     public void update() {
         if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -52,67 +54,75 @@ public class Main {
         DisplayManager.clearBuffers();
         cam.getPerspectiveProjection();
         cam.update();
-        
-        glRotatef(rotValue, 0, 0, 1.0f);
+
+        if(isDebugMenuShown) {
+            System.out.println("hello");
+        }
+
+        // Grid Drawing
+        glBegin(GL_LINES);
+        for(int i=0;i<=10;i++) {
+            if (i==0) { glColor3f(0.6f,0.3f,0.3f); } else { glColor3f(0.25f,0.25f,0.25f); };
+            glVertex3f(i,0,0);
+            glVertex3f(i,0,10);
+            if (i==0) { glColor3f(0.3f,0.3f,0.6f); } else { glColor3f(0.25f,0.25f,0.25f); };
+            glVertex3f(0,0,i);
+            glVertex3f(10,0,i);
+        };
+        glEnd();
+
+        glTranslatef(5,0.5f,5);
+        glRotatef(rotValue, 0, 1, 0);
         glBegin(GL_QUADS);
-        // Cube
+            glColor3f(1.0f, 0.0f, 0.0f);
+            // FRONT
+            glVertex3f(-0.5f, -0.5f, 0.5f);
+            glColor3f(0.0f, 1.0f, 0.0f);
+            glVertex3f( 0.5f, -0.5f, 0.5f);
+            glVertex3f( 0.5f, 0.5f, 0.5f);
+            glColor3f(1.0f, 0.0f, 0.0f);
+            glVertex3f(-0.5f, 0.5f, 0.5f);
+            // BACK
+            glVertex3f(-0.5f, -0.5f, -0.5f);
+            glVertex3f(-0.5f, 0.5f, -0.5f);
+            glColor3f(0.0f, 1.0f, 0.0f);
+            glVertex3f( 0.5f, 0.5f, -0.5f);
+            glVertex3f( 0.5f, -0.5f, -0.5f);
 
-        glColor3f(1.0f, 0.0f, 0.0f);
-        // FRONT
-        glVertex3f(-0.5f, -0.5f, 0.5f);
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3f( 0.5f, -0.5f, 0.5f);
-        glVertex3f( 0.5f, 0.5f, 0.5f);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(-0.5f, 0.5f, 0.5f);
-        // BACK
-        glVertex3f(-0.5f, -0.5f, -0.5f);
-        glVertex3f(-0.5f, 0.5f, -0.5f);
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3f( 0.5f, 0.5f, -0.5f);
-        glVertex3f( 0.5f, -0.5f, -0.5f);
+            glColor3f(0.0f, 1.0f, 0.0f);
+            // LEFT
+            glVertex3f(-0.5f, -0.5f, 0.5f);
+            glVertex3f(-0.5f, 0.5f, 0.5f);
+            glColor3f(0.0f, 0.0f, 1.0f);
+            glVertex3f(-0.5f, 0.5f, -0.5f);
+            glColor3f(1.0f, 0.0f, 0.0f);
+            glVertex3f(-0.5f, -0.5f, -0.5f);
+            // RIGHT
+            glVertex3f( 0.5f, -0.5f, -0.5f);
+            glVertex3f( 0.5f, 0.5f, -0.5f);
+            glColor3f(0.0f, 1.0f, 0.0f);
+            glVertex3f( 0.5f, 0.5f, 0.5f);
+            glColor3f(0.0f, 0.0f, 1.0f);
+            glVertex3f( 0.5f, -0.5f, 0.5f);
 
-        glColor3f(0.0f, 1.0f, 0.0f);
-        // LEFT
-        glVertex3f(-0.5f, -0.5f, 0.5f);
-        glVertex3f(-0.5f, 0.5f, 0.5f);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(-0.5f, 0.5f, -0.5f);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(-0.5f, -0.5f, -0.5f);
-        // RIGHT
-        glVertex3f( 0.5f, -0.5f, -0.5f);
-        glVertex3f( 0.5f, 0.5f, -0.5f);
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3f( 0.5f, 0.5f, 0.5f);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f( 0.5f, -0.5f, 0.5f);
-
-        glColor3f(0.0f, 0.0f, 1.0f);
-        // TOP
-        glVertex3f(-0.5f, 0.5f, 0.5f);
-        glVertex3f( 0.5f, 0.5f, 0.5f);
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3f( 0.5f, 0.5f, -0.5f);
-        glVertex3f(-0.5f, 0.5f, -0.5f);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        // BOTTOM
-        glVertex3f(-0.5f, -0.5f, 0.5f);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(-0.5f, -0.5f, -0.5f);
-        glVertex3f( 0.5f, -0.5f, -0.5f);
-        glVertex3f( 0.5f, -0.5f, 0.5f);
-        /* Plane
-            glVertex3f(-1,-0.5f,-1);
-            glVertex3f(1,-0.5f,-1);
-            glVertex3f(1,-0.5f,-3);
-            glVertex3f(-1,-0.5f,-3);
-        */
+            glColor3f(0.0f, 0.0f, 1.0f);
+            // TOP
+            glVertex3f(-0.5f, 0.5f, 0.5f);
+            glVertex3f( 0.5f, 0.5f, 0.5f);
+            glColor3f(0.0f, 1.0f, 0.0f);
+            glVertex3f( 0.5f, 0.5f, -0.5f);
+            glVertex3f(-0.5f, 0.5f, -0.5f);
+            glColor3f(1.0f, 0.0f, 0.0f);
+            // BOTTOM
+            glVertex3f(-0.5f, -0.5f, 0.5f);
+            glColor3f(0.0f, 0.0f, 1.0f);
+            glVertex3f(-0.5f, -0.5f, -0.5f);
+            glVertex3f( 0.5f, -0.5f, -0.5f);
+            glVertex3f( 0.5f, -0.5f, 0.5f);
         glEnd();
     }
 
     public void loop() {
-
         long lastTickTime = System.nanoTime();
         long lastRenderTime = System.nanoTime();
 

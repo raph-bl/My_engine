@@ -1,5 +1,6 @@
 package fr.andreidot.render;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.BufferedReader;
@@ -52,10 +53,10 @@ public class OBJLoader {
             }
 
 
-            while(line != null ) {
-                if(!line.startsWith("f ")) {
-                    line = buff.readLine();
-                    continue;
+                while(line != null ) {
+                    if(!line.startsWith("f ")) {
+                        line = buff.readLine();
+                        continue;
                 }
 
                 String[] currentLine        = line.split(" ");
@@ -96,8 +97,8 @@ public class OBJLoader {
         indices.add(currentVertexPointer);
 
         Vector3f currentNorm = normals.get(Integer.parseInt(vertexData[2])-1);
-        normalsArray[currentVertexPointer*3]    = currentNorm.x;
-        normalsArray[currentVertexPointer*3+1]  = currentNorm.y;
-        normalsArray[currentVertexPointer*3+2]  = currentNorm.z;
+        normalsArray[currentVertexPointer * 3]       = currentNorm.x;
+        normalsArray[currentVertexPointer * 3 + 1]   = currentNorm.y;
+        normalsArray[currentVertexPointer * 3 + 2]   = currentNorm.z;
     }
 }
